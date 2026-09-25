@@ -7,30 +7,31 @@ import PizzaCustomizer from './components/PizzaCustomizer';
 import BottomCartBar from './components/BottomCartBar';
 import OrderSummary from './components/OrderSummary';
 import LiveTracker from './components/LiveTracker';
-
-// Mock Data (will be replaced by API call)
-const MOCK_CATEGORIES = [
-  {
-    id: 1, name: 'Pizze Rosse', description: 'Classic red base with San Marzano tomatoes DOP',
-    items: [
-      { id: 101, name: 'Margherita', basePrice: 329, description: 'Tomato, mozzarella, basil', dietaryType: 'VEG', sourdoughNotes: '48hr fermented sourdough base' },
-      { id: 102, name: 'Pepperoni Feast', basePrice: 449, description: 'Double pepperoni, mozzarella', dietaryType: 'NON_VEG' },
-      { id: 103, name: 'Garden Party', basePrice: 399, description: 'Peppers, olives, feta', dietaryType: 'VEG' }
-    ]
-  },
-];
-
-const MOCK_TOPPINGS = [
-  { id: 1, name: 'Extra Cheese', price: 50, dietaryType: 'VEG' },
-  { id: 2, name: 'Olives', price: 30, dietaryType: 'VEG' },
-];
+import { fetchMenu } from './services/api';
 
 function App() {
   const { guest, currentOrderNumber, addToCart } = useCartStore();
   
-  // Step 1: Details, Step 2: Menu, Step 3: Checkout, Step 4: Track
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedPizza, setSelectedPizza] = useState(null);
+  const [menuData, setMenuData] = useState({ categories: [], availableToppings: [] });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadMenu = async () => {
+      try {
+        const data = await fetchMenu();
+        setMenuData(data);
+      } catch (err) {
+        console.error("Failed to load menu", err);
+        setError("Could not load the menu. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadMenu();
+  }, []);
 
   useEffect(() => {
     if (currentOrderNumber) {
@@ -52,10 +53,16 @@ function App() {
         )}
 
         {currentStep === 2 && (
-          <MenuGrid 
-            categories={MOCK_CATEGORIES} 
-            onSelectItem={(item) => setSelectedPizza(item)} 
-          />
+          isLoading ? (
+            <div className="text-center py-20 animate-pulse text-neo-charcoal/50 font-bold text-xl">Firing up the oven...</div>
+          ) : error ? (
+            <div className="text-center py-20 text-red-500 font-bold">{error}</div>
+          ) : (
+            <MenuGrid 
+              categories={menuData.categories} 
+              onSelectItem={(item) => setSelectedPizza(item)} 
+            />
+          )
         )}
 
         {currentStep === 3 && (
@@ -77,7 +84,7 @@ function App() {
       {selectedPizza && (
         <PizzaCustomizer 
           item={selectedPizza} 
-          availableToppings={MOCK_TOPPINGS}
+          availableToppings={menuData.availableToppings}
           onClose={() => setSelectedPizza(null)} 
           onAdd={(customizedItem) => {
              addToCart(customizedItem);
