@@ -53,17 +53,20 @@ const MenuGrid = ({ categories, onSelectItem }) => {
           {allItems.map((item, idx) => (
             <div 
               key={item.id} 
-              className="bg-white rounded-3xl p-5 md:p-6 lg:p-8 shadow-sm hover:shadow-md transition-shadow border border-black/5 flex items-center gap-4 md:gap-6 cursor-pointer"
-              onClick={() => onSelectItem(item)}
+              className={`bg-white rounded-3xl p-5 md:p-6 lg:p-8 shadow-sm transition-shadow border border-black/5 flex items-center gap-4 md:gap-6 ${item.isAvailable ? 'cursor-pointer hover:shadow-md' : 'opacity-60 cursor-not-allowed grayscale'}`}
+              onClick={() => item.isAvailable && onSelectItem(item)}
             >
               <PizzaGraphic />
               
               <div className="flex-grow">
-                <h4 className="font-bold text-lg md:text-xl text-neo-charcoal leading-tight mb-1">{item.name}</h4>
+                <h4 className="font-bold text-lg md:text-xl text-neo-charcoal leading-tight mb-1">
+                  {item.name}
+                  {!item.isAvailable && <span className="ml-2 bg-gray-200 text-gray-600 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider align-middle">Out of stock</span>}
+                </h4>
                 <p className="text-xs md:text-sm text-neo-charcoal/60 mb-2 md:mb-3 line-clamp-1 md:line-clamp-2">
                   {item.description}
                 </p>
-                {idx === 1 && (
+                {idx === 1 && item.isAvailable && (
                   <span className="inline-block bg-red-100 text-neo-red text-[10px] md:text-xs font-bold px-2 py-0.5 rounded mb-2 md:mb-3">
                     BESTSELLER
                   </span>
@@ -71,10 +74,14 @@ const MenuGrid = ({ categories, onSelectItem }) => {
                 <div className="flex items-center justify-between mt-1 md:mt-4">
                   <span className="font-bold text-lg md:text-2xl">₹{item.basePrice}</span>
                   <button 
-                    onClick={(e) => { e.stopPropagation(); onSelectItem(item); }}
-                    className="bg-neo-red hover:bg-neo-red-dark text-white font-bold px-4 md:px-6 py-2 md:py-3 rounded-xl text-sm md:text-base transition-colors"
+                    onClick={(e) => { 
+                      e.stopPropagation(); 
+                      if (item.isAvailable) onSelectItem(item); 
+                    }}
+                    disabled={!item.isAvailable}
+                    className={`${item.isAvailable ? 'bg-neo-red hover:bg-neo-red-dark text-white' : 'bg-gray-200 text-gray-500 cursor-not-allowed'} font-bold px-4 md:px-6 py-2 md:py-3 rounded-xl text-sm md:text-base transition-colors`}
                   >
-                    + Add
+                    {item.isAvailable ? '+ Add' : 'Sold Out'}
                   </button>
                 </div>
               </div>

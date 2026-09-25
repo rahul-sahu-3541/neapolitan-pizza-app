@@ -32,6 +32,10 @@ restaurant:
   gst-percentage: 0.0
   default-prep-minutes: 15
 
+admin:
+  secret:
+    key: ${ADMIN_PIN:1234}
+
 ---
 # PostgreSQL Production/Docker Profile
 spring:

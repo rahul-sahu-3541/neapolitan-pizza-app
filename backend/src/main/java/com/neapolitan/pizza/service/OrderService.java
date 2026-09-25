@@ -185,4 +185,21 @@ public class OrderService {
                 .map(OrderResponse::fromEntity)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public com.neapolitan.pizza.dto.AnalyticsResponse getAnalytics() {
+        List<Order> allOrders = orderRepository.findAll();
+        long totalOrders = allOrders.size();
+        
+        long activeOrders = allOrders.stream()
+                .filter(o -> o.getStatus() != OrderStatus.COMPLETED && o.getStatus() != OrderStatus.CANCELLED)
+                .count();
+                
+        BigDecimal totalRevenue = allOrders.stream()
+                .filter(o -> o.getStatus() == OrderStatus.COMPLETED)
+                .map(Order::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                
+        return new com.neapolitan.pizza.dto.AnalyticsResponse(totalOrders, activeOrders, totalRevenue);
+    }
 }

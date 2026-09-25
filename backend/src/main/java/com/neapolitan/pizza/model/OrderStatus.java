@@ -5,6 +5,7 @@ public enum OrderStatus {
     PREPARING("Dough Stretched & Topped", "Chef is hand-stretching your 48h sourdough base"),
     IN_OVEN("In the 500°C Wood-Fired Oven", "Flash-baking for 90 seconds under real wood flame"),
     READY("Ready for You!", "Hot & fresh at your table / ready for pickup"),
+    CASH_COLLECTED("Cash Collected", "Payment has been received"),
     COMPLETED("Completed", "Order served or picked up"),
     CANCELLED("Cancelled", "Order was cancelled");
 
