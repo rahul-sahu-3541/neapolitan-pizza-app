@@ -1,0 +1,39 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+@theme {
+  --color-neo-red: #D32F2F;
+  --color-neo-red-dark: #B71C1C;
+  --color-neo-cream: #FFF9F5;
+  --color-neo-charcoal: #1A1A1A;
+  --color-neo-green: #2E7D32;
+  --font-sans: "Outfit", "Inter", sans-serif;
+  --font-serif: "Playfair Display", serif;
+}
+
+@layer base {
+  body {
+    @apply bg-neo-cream text-neo-charcoal font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+.glass-panel {
+  @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-lg;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-neo-red/30 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-neo-red/60;
+}

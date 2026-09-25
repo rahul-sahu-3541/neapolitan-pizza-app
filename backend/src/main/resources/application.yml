@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: neapolitan-pizza-service
+  profiles:
+    active: dev
+
+  # Default Dev Profile (H2 In-Memory with PostgreSQL compatibility)
+  datasource:
+    url: jdbc:h2:mem:neapolitan_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+    show-sql: false
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
+# Restaurant Business Configuration
+restaurant:
+  name: "Forno D'Oro Pizzeria Napoletana"
+  currency: "INR"
+  currency-symbol: "₹"
+  gst-percentage: 0.0
+  default-prep-minutes: 15
+
+---
+# PostgreSQL Production/Docker Profile
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: jdbc:postgresql://db.flxmbbckyyiruxeoiabm.supabase.co:5432/postgres
+    username: postgres
+    password: ${DB_PASSWORD:postgrespassword}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
