@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useCartStore from '../store/useCartStore';
+import useCartStore from '../../../store/useCartStore';
 
 const Step1Details = ({ onNext }) => {
   const { guest, setGuestDetails } = useCartStore();

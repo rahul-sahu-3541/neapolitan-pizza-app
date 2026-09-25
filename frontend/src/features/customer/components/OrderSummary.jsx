@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import useCartStore from '../store/useCartStore';
-import { placeOrder } from '../services/api';
+import useCartStore from '../../../store/useCartStore';
+import { placeOrder } from '../../../services/api';
 
 const PizzaSlice = () => (
   <div className="w-12 h-12 bg-neo-red/10 rounded-xl flex items-center justify-center shrink-0">

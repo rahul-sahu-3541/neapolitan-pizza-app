@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { createStompClient } from '../services/websocket';
-import { trackOrder } from '../services/api';
-import useCartStore from '../store/useCartStore';
+import { createStompClient } from '../../../services/websocket';
+import { trackOrder } from '../../../services/api';
+import useCartStore from '../../../store/useCartStore';
 
 const STATUS_STAGES = [
   { status: 'RECEIVED', label: 'Order received', timeLabel: '7:07 PM', detail: "We've got your order." },

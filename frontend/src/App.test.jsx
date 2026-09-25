@@ -22,6 +22,8 @@ vi.mock('./services/websocket', () => ({
   }))
 }));
 
+import { BrowserRouter } from 'react-router-dom';
+
 describe('Pizza Order Flow', () => {
   beforeEach(() => {
     // Reset Zustand store state before each test
@@ -32,11 +34,20 @@ describe('Pizza Order Flow', () => {
       currentOrderToken: null
     });
     vi.clearAllMocks();
+    
+    api.fetchMenu.mockResolvedValue({
+      categories: [{ id: 1, name: 'Pizze', items: [{ id: 1, name: 'Margherita', basePrice: 329 }] }],
+      availableToppings: [{ id: 1, name: 'Extra Cheese', price: 50 }]
+    });
   });
 
   it('places an order and reaches the final Live Tracker page', async () => {
     const user = userEvent.setup();
-    render(<App />);
+    render(
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    );
 
     // Step 1: Guest Details
     expect(screen.getByText(/Your next favorite.*pizza starts here/i)).toBeInTheDocument();

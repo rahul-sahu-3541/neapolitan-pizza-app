@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import useCartStore from '../store/useCartStore';
+import useCartStore from '../../../store/useCartStore';
 
 const PizzaCustomizer = ({ item, availableToppings, onClose }) => {
   const addToCart = useCartStore(state => state.addToCart);

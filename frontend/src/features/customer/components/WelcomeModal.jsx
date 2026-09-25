@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import useCartStore from '../store/useCartStore';
+import useCartStore from '../../../store/useCartStore';
 
 const WelcomeModal = ({ isOpen, onClose }) => {
   const { guest, setGuestDetails } = useCartStore();
