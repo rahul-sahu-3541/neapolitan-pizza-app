@@ -4,8 +4,7 @@ INSERT INTO categories (id, name, description, display_order) VALUES
 (2, 'Pizze Bianche', 'White base pizzas featuring creamy Fior di Latte mozzarella and aged cheeses', 2),
 (3, 'Antipasti & Sides', 'Wood-fired appetisers and starters from our stone oven', 3),
 (4, 'Dolci', 'Authentic Italian desserts made in-house fresh daily', 4),
-(5, 'Bevande', 'Refreshing sparkling sodas and Italian beverages', 5)
-ON CONFLICT (id) DO NOTHING;
+(5, 'Bevande', 'Refreshing sparkling sodas and Italian beverages', 5);
 
 -- 2. Menu Items (with authentic Neapolitan descriptions & Indian dietary tags)
 INSERT INTO menu_items (id, category_id, name, description, sourdough_notes, base_price, dietary_type, image_url, is_available) VALUES
@@ -62,8 +61,7 @@ INSERT INTO menu_items (id, category_id, name, description, sourdough_notes, bas
 (11, 5, 'San Pellegrino Limonata', 
     'Zesty sparkling lemon beverage made with Mediterranean lemons, 330ml can.', 
     'Crisp palate cleanser for pizza.', 
-    220.00, 'VEG', 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80', true)
-ON CONFLICT (id) DO NOTHING;
+    220.00, 'VEG', 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80', true);
 
 -- 3. Toppings / Add-ons (Indian market customizable)
 INSERT INTO toppings (id, name, price, dietary_type, is_available) VALUES
@@ -73,5 +71,4 @@ INSERT INTO toppings (id, name, price, dietary_type, is_available) VALUES
 (4, 'White Truffle Oil Drizzle', 90.00, 'VEG', true),
 (5, 'Pickled Jalapeño Slices', 40.00, 'VEG', true),
 (6, 'Smoked Spicy Pepperoni', 140.00, 'NON_VEG', true),
-(7, 'Herb Roast Pulled Chicken', 120.00, 'NON_VEG', true)
-ON CONFLICT (id) DO NOTHING;
+(7, 'Herb Roast Pulled Chicken', 120.00, 'NON_VEG', true);

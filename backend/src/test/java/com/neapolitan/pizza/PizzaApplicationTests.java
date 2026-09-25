@@ -103,4 +103,29 @@ class PizzaApplicationTests {
         assertEquals(OrderStatus.IN_OVEN, inOven.getStatus());
         assertEquals(PaymentStatus.PAID, inOven.getPaymentStatus());
     }
+
+    @Autowired
+    private jakarta.validation.Validator validator;
+
+    @Test
+    void testPlaceOrderWithInvalidPhoneNumber_ThrowsException() {
+        CreateOrderRequest request = new CreateOrderRequest();
+        request.setCustomerName("Test User");
+        // Invalid US phone number, should fail the Indian phone number regex
+        request.setCustomerPhone("1234567890"); 
+        request.setOrderType(OrderType.TAKEAWAY);
+        request.setPaymentMethod(PaymentMethod.PAY_AT_COUNTER);
+
+        CreateOrderRequest.OrderItemRequest item = new CreateOrderRequest.OrderItemRequest();
+        item.setMenuItemId(1L);
+        item.setQuantity(1);
+        request.setItems(List.of(item));
+
+        java.util.Set<jakarta.validation.ConstraintViolation<CreateOrderRequest>> violations = validator.validate(request);
+        
+        assertFalse(violations.isEmpty(), "Expected validation errors but found none");
+        boolean hasPhoneError = violations.stream()
+                .anyMatch(v -> v.getMessage().contains("Please enter a valid 10-digit Indian mobile number"));
+        assertTrue(hasPhoneError, "Expected phone validation error");
+    }
 }

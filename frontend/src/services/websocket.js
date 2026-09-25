@@ -1,8 +1,12 @@
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
-// Use environment variable for the WS URL, or default to localhost for local dev
-const WS_URL = import.meta.env.VITE_WS_URL || 'http://localhost:8080/ws';
+const getWsUrl = () => {
+  if (import.meta.env.VITE_WS_URL) return import.meta.env.VITE_WS_URL;
+  return 'http://localhost:8080/ws';
+};
+
+const WS_URL = getWsUrl();
 
 export const createStompClient = (onConnect) => {
   const client = new Client({

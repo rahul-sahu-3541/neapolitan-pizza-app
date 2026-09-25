@@ -31,4 +31,12 @@ public class OrderController {
         OrderResponse order = orderService.getOrderByNumberAndToken(orderNumber, token);
         return ResponseEntity.ok(order);
     }
+
+    @ExceptionHandler(org.springframework.web.server.ResponseStatusException.class)
+    public ResponseEntity<java.util.Map<String, String>> handleResponseStatusException(org.springframework.web.server.ResponseStatusException ex) {
+        java.util.Map<String, String> body = new java.util.HashMap<>();
+        body.put("error", ex.getStatusCode().toString());
+        body.put("message", ex.getReason());
+        return new ResponseEntity<>(body, ex.getStatusCode());
+    }
 }

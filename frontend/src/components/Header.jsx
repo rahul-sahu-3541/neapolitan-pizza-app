@@ -14,9 +14,12 @@ const Header = ({ currentStep, setStep }) => {
       <div className="max-w-6xl mx-auto">
         <div className="px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setStep(1)}>
-            <span className="text-xl md:text-2xl">🍕</span>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2001/svg" className="text-neo-red">
+              <path d="M12 2C6.48 2 2 6.48 2 12V22H22V12C22 6.48 17.52 2 12 2ZM12 10C10.34 10 9 11.34 9 13H15C15 11.34 13.66 10 12 10ZM4 20V12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12V20H4Z" fill="currentColor"/>
+              <path d="M10 15H14V17H10V15Z" fill="currentColor"/>
+            </svg>
             <h1 className="text-xl md:text-2xl font-bold tracking-tight text-neo-red font-sans">
-              CRUST & FIRE
+              AL FORNO
             </h1>
           </div>
           

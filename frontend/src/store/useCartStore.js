@@ -20,6 +20,18 @@ const useCartStore = create(
       removeFromCart: (index) => set((state) => ({
         cart: state.cart.filter((_, i) => i !== index)
       })),
+      updateCartItemQuantity: (index, newQuantity) => set((state) => {
+        if (newQuantity <= 0) {
+          return { cart: state.cart.filter((_, i) => i !== index) };
+        }
+        const newCart = [...state.cart];
+        const item = { ...newCart[index] }; // Create a copy of the item
+        const unitPrice = item.subtotal / item.quantity;
+        item.quantity = newQuantity;
+        item.subtotal = unitPrice * newQuantity;
+        newCart[index] = item;
+        return { cart: newCart };
+      }),
       clearCart: () => set({ cart: [] }),
       
       cartTotal: () => get().cart.reduce((total, item) => total + item.subtotal, 0),
