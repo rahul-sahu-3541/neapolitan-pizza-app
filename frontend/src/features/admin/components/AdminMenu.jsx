@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchMenu, createMenuItem, updateMenuItem, deleteMenuItem } from '../../../services/api';
-import { Edit2, Trash2, Plus, Search } from 'lucide-react';
+import { Edit2, Trash2, Plus, Search, CheckCircle2 } from 'lucide-react';
 
 const AdminMenu = () => {
   const [categories, setCategories] = useState([]);
