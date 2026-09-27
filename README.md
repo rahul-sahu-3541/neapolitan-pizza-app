@@ -52,6 +52,10 @@ A modern, full-stack restaurant order management system designed for a Neapolita
    ```bash
    export DB_PASSWORD="your_supabase_db_password"
    export ADMIN_PIN="your_secret_admin_pin"
+   
+   # Optional: WhatsApp Meta Developer API (for order notifications)
+   export WHATSAPP_ACCESS_TOKEN="your_meta_access_token"
+   export WHATSAPP_PHONE_ID="your_meta_phone_number_id"
    ```
 3. Run the backend server using the `postgres` profile:
    ```bash
