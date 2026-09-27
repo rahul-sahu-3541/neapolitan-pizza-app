@@ -108,9 +108,11 @@ public class NotificationService {
                 body.put("text", textObj);
 
                 HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-                restTemplate.postForObject(url, request, String.class);
-                log.info("WhatsApp notification sent to {}", cleanPhone);
+                String response = restTemplate.postForObject(url, request, String.class);
+                log.info("WhatsApp notification sent successfully to {}. Response: {}", cleanPhone, response);
                 
+            } catch (org.springframework.web.client.HttpStatusCodeException e) {
+                log.error("WhatsApp API rejected the message to {}! Status: {}, Error Details: {}", phoneNumber, e.getStatusCode(), e.getResponseBodyAsString());
             } catch (Exception e) {
                 log.error("Failed to send WhatsApp message to {}: {}", phoneNumber, e.getMessage());
             }
