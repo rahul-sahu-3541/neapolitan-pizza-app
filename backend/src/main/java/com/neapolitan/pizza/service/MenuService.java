@@ -8,6 +8,8 @@ import com.neapolitan.pizza.model.Topping;
 import com.neapolitan.pizza.repository.CategoryRepository;
 import com.neapolitan.pizza.repository.MenuItemRepository;
 import com.neapolitan.pizza.repository.ToppingRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,7 @@ public class MenuService {
         this.menuItemRepository = menuItemRepository;
     }
 
+    @Cacheable("fullMenu")
     public MenuResponse getFullMenu() {
         List<Category> categories = categoryRepository.findAllByOrderByDisplayOrderAsc();
         List<Topping> toppings = toppingRepository.findByIsAvailableTrue();
@@ -36,6 +39,7 @@ public class MenuService {
     }
 
     @Transactional
+    @CacheEvict(value = "fullMenu", allEntries = true)
     public MenuItem createMenuItem(MenuItemRequest request) {
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new IllegalArgumentException("Category not found"));
@@ -53,6 +57,7 @@ public class MenuService {
     }
 
     @Transactional
+    @CacheEvict(value = "fullMenu", allEntries = true)
     public MenuItem updateMenuItem(Long id, MenuItemRequest request) {
         MenuItem item = menuItemRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Menu item not found"));
@@ -72,6 +77,7 @@ public class MenuService {
     }
 
     @Transactional
+    @CacheEvict(value = "fullMenu", allEntries = true)
     public void deleteMenuItem(Long id) {
         menuItemRepository.deleteById(id);
     }

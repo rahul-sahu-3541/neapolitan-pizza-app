@@ -8,6 +8,8 @@ import com.neapolitan.pizza.repository.MenuItemRepository;
 import com.neapolitan.pizza.repository.OrderRepository;
 import com.neapolitan.pizza.repository.ToppingRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +48,7 @@ public class OrderService {
         this.notificationService = notificationService;
     }
 
+    @CacheEvict(value = "customerOrders", key = "#req.customerPhone")
     public OrderResponse createOrder(CreateOrderRequest req) {
         Order order = new Order();
         String orderNum = "NP-" + ORDER_COUNTER.getAndIncrement();
@@ -145,6 +148,7 @@ public class OrderService {
         return OrderResponse.fromEntity(order);
     }
 
+    @CacheEvict(value = "customerOrders", allEntries = true)
     public OrderResponse updateOrderStatus(String orderNumber, UpdateOrderStatusRequest req) {
         Order order = orderRepository.findByOrderNumber(orderNumber)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found: " + orderNumber));
@@ -187,6 +191,7 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "customerOrders", key = "#customerPhone")
     public List<OrderResponse> getOrdersByCustomerPhone(String customerPhone) {
         return orderRepository.findByCustomerPhoneOrderByCreatedAtDesc(customerPhone)
                 .stream()
