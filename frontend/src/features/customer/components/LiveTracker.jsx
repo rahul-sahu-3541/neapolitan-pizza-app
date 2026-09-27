@@ -154,7 +154,10 @@ const LiveTracker = ({ onNewOrder }) => {
 
       <div className="mt-8 flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
         <button 
-          onClick={onNewOrder}
+          onClick={() => {
+            useCartStore.getState().clearCurrentOrder();
+            onNewOrder();
+          }}
           className="w-full md:w-48 bg-neo-red hover:bg-neo-red-dark text-white rounded-xl py-4 flex items-center justify-center font-bold transition-transform active:scale-95 shadow-md shadow-neo-red/20"
         >
           Back to menu

@@ -39,7 +39,14 @@ const useCartStore = create(
       // Order State
       currentOrderToken: null,
       currentOrderNumber: null,
-      setCurrentOrder: (orderNumber, token) => set({ currentOrderNumber: orderNumber, currentOrderToken: token }),
+      orderHistory: [],
+      setCurrentOrder: (orderNumber, token) => set((state) => {
+        const newHistory = [...(state.orderHistory || [])];
+        if (!newHistory.find(o => o.orderNumber === orderNumber)) {
+           newHistory.unshift({ orderNumber, token, date: new Date().toISOString() });
+        }
+        return { currentOrderNumber: orderNumber, currentOrderToken: token, orderHistory: newHistory };
+      }),
       clearCurrentOrder: () => set({ currentOrderNumber: null, currentOrderToken: null, cart: [] })
     }),
     {

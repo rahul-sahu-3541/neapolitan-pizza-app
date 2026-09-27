@@ -7,6 +7,7 @@ import PizzaCustomizer from './components/PizzaCustomizer';
 import BottomCartBar from './components/BottomCartBar';
 import OrderSummary from './components/OrderSummary';
 import LiveTracker from './components/LiveTracker';
+import PastOrders from './components/PastOrders';
 import { fetchMenu } from '../../services/api';
 
 function CustomerApp() {
@@ -73,6 +74,10 @@ function CustomerApp() {
 
         {currentStep === 4 && (
           <LiveTracker onNewOrder={() => setCurrentStep(1)} />
+        )}
+
+        {currentStep === 5 && (
+          <PastOrders onBack={() => setCurrentStep(2)} onViewLiveTracker={() => setCurrentStep(4)} />
         )}
       </main>
 

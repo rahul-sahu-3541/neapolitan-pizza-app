@@ -28,7 +28,7 @@ const Header = ({ currentStep, setStep }) => {
           </div>
 
           <div className="hidden md:flex items-center gap-6 text-sm font-bold text-neo-charcoal">
-            <button className="hover:text-neo-red transition-colors">How it works</button>
+            <button className="hover:text-neo-red transition-colors" onClick={() => setStep(5)}>My Orders</button>
             <button className="hover:text-neo-red transition-colors" onClick={() => setStep(2)}>Menu</button>
             <button className="hover:text-neo-red transition-colors">Contact</button>
           </div>
