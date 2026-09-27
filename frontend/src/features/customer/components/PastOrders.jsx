@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useCartStore from '../../store/useCartStore';
+import useCartStore from '../../../store/useCartStore';
 import { trackOrder } from '../../../services/api';
 import { Clock, History, PackageCheck, Pizza } from 'lucide-react';
 
