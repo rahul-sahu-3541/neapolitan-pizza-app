@@ -111,8 +111,8 @@ const PastOrders = ({ onBack, onViewLiveTracker }) => {
                     <ul className="space-y-2">
                       {order.items.map((item, idx) => (
                         <li key={idx} className="flex justify-between text-sm text-gray-600 font-medium">
-                          <span>{item.quantity}x {item.name}</span>
-                          <span className="font-bold text-neo-charcoal">₹{item.price * item.quantity}</span>
+                          <span>{item.quantity}x {item.itemName}</span>
+                          <span className="font-bold text-neo-charcoal">₹{item.subtotal}</span>
                         </li>
                       ))}
                     </ul>
