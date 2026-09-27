@@ -24,7 +24,7 @@ const LiveTracker = ({ onNewOrder }) => {
   const [client, setClient] = useState(null);
 
   useEffect(() => {
-    if (!currentOrderNumber || !currentOrderToken) return;
+    if (!currentOrderNumber) return;
 
     const fetchState = async () => {
       try {

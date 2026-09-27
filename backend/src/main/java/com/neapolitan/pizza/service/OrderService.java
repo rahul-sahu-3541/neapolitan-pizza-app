@@ -187,6 +187,14 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    public List<OrderResponse> getOrdersByCustomerPhone(String customerPhone) {
+        return orderRepository.findByCustomerPhoneOrderByCreatedAtDesc(customerPhone)
+                .stream()
+                .map(OrderResponse::fromEntity)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public com.neapolitan.pizza.dto.AnalyticsResponse getAnalytics() {
         List<Order> allOrders = orderRepository.findAll();
         long totalOrders = allOrders.size();

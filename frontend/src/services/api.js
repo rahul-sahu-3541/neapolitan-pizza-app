@@ -43,7 +43,13 @@ export const placeOrder = async (orderPayload) => {
 };
 
 export const trackOrder = async (orderNumber, token) => {
-  const response = await api.get(`/orders/${orderNumber}?token=${token}`);
+  const url = token ? `/orders/${orderNumber}?token=${token}` : `/orders/${orderNumber}`;
+  const response = await api.get(url);
+  return response.data;
+};
+
+export const fetchCustomerOrders = async (phone) => {
+  const response = await api.get(`/orders/customer/${encodeURIComponent(phone)}`);
   return response.data;
 };
 

@@ -32,6 +32,11 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
+    @GetMapping("/customer/{phone}")
+    public ResponseEntity<java.util.List<OrderResponse>> getCustomerOrders(@PathVariable String phone) {
+        return ResponseEntity.ok(orderService.getOrdersByCustomerPhone(phone));
+    }
+
     @ExceptionHandler(org.springframework.web.server.ResponseStatusException.class)
     public ResponseEntity<java.util.Map<String, String>> handleResponseStatusException(org.springframework.web.server.ResponseStatusException ex) {
         java.util.Map<String, String> body = new java.util.HashMap<>();

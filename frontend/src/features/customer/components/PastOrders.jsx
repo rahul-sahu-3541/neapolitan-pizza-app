@@ -1,44 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import useCartStore from '../../../store/useCartStore';
-import { trackOrder } from '../../../services/api';
+import { fetchCustomerOrders } from '../../../services/api';
 import { Clock, History, PackageCheck, Pizza } from 'lucide-react';
 
 const PastOrders = ({ onBack, onViewLiveTracker }) => {
-  const { orderHistory, setCurrentOrder } = useCartStore();
+  const { guest, orderHistory, setCurrentOrder } = useCartStore();
   const [ordersData, setOrdersData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchHistory = async () => {
-      if (!orderHistory || orderHistory.length === 0) {
+      if (!guest || !guest.phone) {
         setLoading(false);
         return;
       }
       
       try {
-        // Fetch real-time status for all orders in history
-        const promises = orderHistory.map(entry => 
-          trackOrder(entry.orderNumber, entry.token).catch(() => null)
-        );
-        const results = await Promise.all(promises);
-        
-        // Filter out any that failed (e.g. invalid token) and sort by date
-        const validOrders = results.filter(r => r !== null).sort((a, b) => 
-          new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setOrdersData(validOrders);
+        // Fetch all orders from database based on phone number
+        const results = await fetchCustomerOrders(guest.phone);
+        setOrdersData(results || []);
       } catch (err) {
-        console.error("Failed to load order history", err);
+        console.error("Failed to load order history from database", err);
       } finally {
         setLoading(false);
       }
     };
     
     fetchHistory();
-  }, [orderHistory]);
+  }, [guest]);
 
-  const handleReopenTracker = (orderNumber, token) => {
-    setCurrentOrder(orderNumber, token);
+  const handleReopenTracker = (orderNumber) => {
+    // Look up token in local storage history if available, else null
+    const historyEntry = orderHistory.find(h => h.orderNumber === orderNumber);
+    setCurrentOrder(orderNumber, historyEntry ? historyEntry.token : null);
     onViewLiveTracker();
   };
 
@@ -84,7 +78,7 @@ const PastOrders = ({ onBack, onViewLiveTracker }) => {
             <Pizza size={40} />
           </div>
           <h3 className="text-lg font-bold text-neo-charcoal mb-2">No past orders yet!</h3>
-          <p className="text-gray-500 mb-6 text-sm">Your order history is securely saved on this device. When you place an order, it will show up here.</p>
+          <p className="text-gray-500 mb-6 text-sm">Your order history is securely retrieved from the database based on your phone number. Place an order to see it here!</p>
           <button 
             onClick={onBack}
             className="bg-neo-red hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition-transform active:scale-95 shadow-lg shadow-red-500/30"
@@ -95,7 +89,6 @@ const PastOrders = ({ onBack, onViewLiveTracker }) => {
       ) : (
         <div className="space-y-4">
           {ordersData.map((order) => {
-            const historyEntry = orderHistory.find(h => h.orderNumber === order.orderNumber);
             const isCompleted = order.status === 'COMPLETED' || order.status === 'CANCELLED';
             
             return (
@@ -133,7 +126,7 @@ const PastOrders = ({ onBack, onViewLiveTracker }) => {
                 <div className="flex sm:flex-col justify-end gap-3 sm:w-40 shrink-0">
                   {!isCompleted && (
                     <button 
-                      onClick={() => handleReopenTracker(order.orderNumber, historyEntry.token)}
+                      onClick={() => handleReopenTracker(order.orderNumber)}
                       className="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-600 font-black py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-sm"
                     >
                       <Clock size={16} /> Track
