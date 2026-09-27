@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useCartStore from '../../store/useCartStore';
 import { trackOrder } from '../../../services/api';
-import { Clock, ExternalLink, History, PackageCheck, Pizza } from 'lucide-react';
+import { Clock, History, PackageCheck, Pizza } from 'lucide-react';
 
 const PastOrders = ({ onBack, onViewLiveTracker }) => {
   const { orderHistory, setCurrentOrder } = useCartStore();
