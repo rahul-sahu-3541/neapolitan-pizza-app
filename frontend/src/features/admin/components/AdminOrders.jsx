@@ -25,11 +25,15 @@ const AdminOrders = () => {
   }, []);
 
   const handleStatusChange = async (orderNumber, newStatus) => {
+    // Optimistic UI Update for instant feedback
+    setOrders(prev => prev.map(o => o.orderNumber === orderNumber ? { ...o, status: newStatus } : o));
+    
     try {
       await updateOrderStatus(orderNumber, { status: newStatus });
-      loadOrders(); // Refresh instantly
+      // The 5-second polling will automatically sync the real state
     } catch (err) {
       console.error('Failed to update status', err);
+      loadOrders(); // Revert on failure
       alert('Failed to update status');
     }
   };
@@ -197,11 +201,14 @@ const AdminOrders = () => {
                         {order.status === 'READY' && order.paymentMethod === 'PAY_AT_COUNTER' ? (
                           <button 
                             onClick={async () => {
+                              // Optimistic UI Update
+                              setOrders(prev => prev.map(o => o.orderNumber === order.orderNumber ? { ...o, status: 'CASH_COLLECTED', paymentStatus: 'PAID' } : o));
+                              
                               try {
                                 await updateOrderStatus(order.orderNumber, { status: 'CASH_COLLECTED', paymentStatus: 'PAID' });
-                                loadOrders();
                               } catch(e) { 
                                 console.error(e); 
+                                loadOrders(); // Revert
                                 alert('Failed to collect cash: ' + (e.response?.data?.message || e.message)); 
                               }
                             }}
