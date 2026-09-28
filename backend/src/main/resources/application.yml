@@ -43,7 +43,7 @@ spring:
     activate:
       on-profile: postgres
   datasource:
-    url: jdbc:postgresql://db.flxmbbckyyiruxeoiabm.supabase.co:5432/postgres
+    url: jdbc:postgresql://db.flxmbbckyyiruxeoiabm.supabase.co:5432/postgres?prepareThreshold=0
     username: postgres
     password: ${DB_PASSWORD:postgrespassword}
     driver-class-name: org.postgresql.Driver
