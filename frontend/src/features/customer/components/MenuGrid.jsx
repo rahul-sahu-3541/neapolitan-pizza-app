@@ -18,8 +18,8 @@ const MenuGrid = ({ categories, onSelectItem }) => {
 
   const filters = ['All pizzas', 'Classics', 'Veggie', 'Sides', 'Drinks'];
 
-  // Flatten items for the 'All' view
-  const allItems = categories.reduce((acc, cat) => [...acc, ...cat.items], []);
+  // Flatten items for the 'All' view and hide out of stock items
+  const allItems = categories.reduce((acc, cat) => [...acc, ...cat.items], []).filter(item => item.isAvailable);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-6 md:py-12 pb-32 md:pb-40 animate-in fade-in">

@@ -37,6 +37,7 @@ public class MenuItem {
     private String imageUrl;
 
     @Column(name = "is_available", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonProperty("isAvailable")
     private Boolean isAvailable = true;
 
     public MenuItem() {}

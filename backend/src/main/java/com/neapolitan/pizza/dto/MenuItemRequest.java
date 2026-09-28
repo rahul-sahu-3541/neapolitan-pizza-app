@@ -17,8 +17,10 @@ public class MenuItemRequest {
     
     private String imageUrl;
     
+    @com.fasterxml.jackson.annotation.JsonProperty("isAvailable")
     private boolean isAvailable = true;
     
+    @com.fasterxml.jackson.annotation.JsonProperty("isVegetarian")
     private boolean isVegetarian;
     
     @NotNull
