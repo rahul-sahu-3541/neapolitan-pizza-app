@@ -36,7 +36,8 @@ public class OrderService {
     @Value("${restaurant.default-prep-minutes:15}")
     private int defaultPrepMinutes;
 
-    private static final AtomicLong ORDER_COUNTER = new AtomicLong(1001);
+    private final AtomicLong orderCounter = new AtomicLong(1);
+    private String currentDatePrefix = "";
 
     public OrderService(OrderRepository orderRepository,
                         MenuItemRepository menuItemRepository,
@@ -48,10 +49,37 @@ public class OrderService {
         this.notificationService = notificationService;
     }
 
+    @jakarta.annotation.PostConstruct
+    public void initOrderCounter() {
+        String todayPrefix = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("ddMMyy"));
+        currentDatePrefix = todayPrefix;
+        
+        orderRepository.findTopByOrderByIdDesc().ifPresent(lastOrder -> {
+            try {
+                if (lastOrder.getOrderNumber() != null && lastOrder.getOrderNumber().startsWith(todayPrefix)) {
+                    String numberPart = lastOrder.getOrderNumber().substring(todayPrefix.length());
+                    long lastNumber = Long.parseLong(numberPart);
+                    orderCounter.set(lastNumber + 1);
+                }
+            } catch (NumberFormatException e) {
+                // Ignore and fall back to 1
+            }
+        });
+    }
+
+    private synchronized String generateOrderNumber() {
+        String todayPrefix = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("ddMMyy"));
+        if (!todayPrefix.equals(currentDatePrefix)) {
+            currentDatePrefix = todayPrefix;
+            orderCounter.set(1);
+        }
+        return todayPrefix + String.format("%04d", orderCounter.getAndIncrement());
+    }
+
     @CacheEvict(value = "customerOrders", key = "#req.customerPhone")
     public OrderResponse createOrder(CreateOrderRequest req) {
         Order order = new Order();
-        String orderNum = "NP-" + ORDER_COUNTER.getAndIncrement();
+        String orderNum = generateOrderNumber();
         order.setOrderNumber(orderNum);
         order.setOrderToken(UUID.randomUUID().toString());
         order.setCustomerName(req.getCustomerName().trim());
