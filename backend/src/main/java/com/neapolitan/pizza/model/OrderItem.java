@@ -36,7 +36,7 @@ public class OrderItem {
     private BigDecimal subtotal;
 
     @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<OrderItemTopping> toppings = new ArrayList<>();
+    private java.util.Set<OrderItemTopping> toppings = new java.util.LinkedHashSet<>();
 
     public OrderItem() {}
 
@@ -101,11 +101,11 @@ public class OrderItem {
         this.subtotal = subtotal;
     }
 
-    public List<OrderItemTopping> getToppings() {
+    public java.util.Set<OrderItemTopping> getToppings() {
         return toppings;
     }
 
-    public void setToppings(List<OrderItemTopping> toppings) {
+    public void setToppings(java.util.Set<OrderItemTopping> toppings) {
         this.toppings = toppings;
     }
 }

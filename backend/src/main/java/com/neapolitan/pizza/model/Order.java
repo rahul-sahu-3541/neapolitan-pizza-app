@@ -70,7 +70,7 @@ public class Order {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> items = new ArrayList<>();
+    private java.util.Set<OrderItem> items = new java.util.LinkedHashSet<>();
 
     public Order() {}
 
@@ -235,11 +235,11 @@ public class Order {
         this.updatedAt = updatedAt;
     }
 
-    public List<OrderItem> getItems() {
+    public java.util.Set<OrderItem> getItems() {
         return items;
     }
 
-    public void setItems(List<OrderItem> items) {
+    public void setItems(java.util.Set<OrderItem> items) {
         this.items = items;
     }
 }
